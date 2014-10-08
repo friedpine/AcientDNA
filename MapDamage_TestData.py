@@ -13,24 +13,24 @@ total = [0,0]
 
 for i in range(0,reads_count):
   pos = int(random.random()*chr_len)
-  seq = in01.get_seq_hg_mmap("chr1",pos,end+99)
-  if N in seq:
+  seq = in01.get_seq_hg_mmap("chr1",pos,pos+99)
+  if "N" in seq:
     continue
-    if i%2==0:
-      strand = "+"
-      total[0] += 1
-    else:
-      strand = "-"
-      total[1] += 1
+  if i%2==0:
+    strand = "+"
+    total[0] += 1
+  else:
+    strand = "-"
+    total[1] += 1
   for index,base in enumerate(seq):
       if base == "C":
         counts[strand]["c"][index] += 1
         if random.random()<freq[index]:
-          seq[index] = "T"
+          seq = seq[0:index]+"T"+seq[index+1:]
           counts[strand]["c_t"][index] += 1
   if strand == "-":
-    seq = in01.reverse_complementary(seq):
-  out.write(">TEST"+pos+"_"+i+"\n+seq+"\n")
+    seq = in01.reverse_complementary(seq)
+  out.write(">TEST"+str(pos)+"_"+str(i)+"\n"+seq+"\n")
   
 print total  
 print counts
